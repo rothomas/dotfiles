@@ -1,14 +1,122 @@
-# Get editor completions based on the config schema
+## Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
 # Inserts a blank line between shell prompts
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+format = """
+[](bg:black fg:white)\
+[ $os $hostname](bg:white)\
+[](bg:blue fg:white)\
+[ $directory](bg:blue)\
+${custom.dir_right_git}${custom.dir_right_no_git}\
+$git_branch\
+$git_status\
+${custom.git_right} """
 
-# Disable the package module, hiding it from the prompt completely
-[package]
-disabled = true
+right_format = """
+$cmd_duration \
+$status\
+[$python$ruby$nodejs$rust ](fg:black bg:blue)\
+[](fg:white bg:blue)\
+$username\
+[ $time ](fg:black bg:white)\
+[](fg:white bg:black)"""
+
+[cmd_duration]
+format = '[](fg:yellow bg:black)[$duration ]($style)[](fg:yellow bg:black)'
+style = 'fg:black bg:yellow'
+
+[directory]
+format = '[$read_only]($read_only_style)[$path]($style) '
+style = "bg:blue fg:bright-white"
+read_only = ' '
+read_only_style = 'bg:blue fg:bright-white'
+home_symbol = ' ~'
+
+
+[git_branch]
+format = "[$symbol$branch(:$remote_branch) ]($style)"
+style = "bg:green fg:black"
+symbol = "   "
+
+[git_status]
+style = "bg:green fg:black"
+format = "[$all_status$ahead_behind ]($style)"
+
+[hostname]
+style = "bg:white fg:black"
+format = "[$hostname ]($style)"
+
+[nodejs]
+format = '[ $symbol($version )]($style)'
+style = "none"
+
+[os]
+disabled = false
+style = "bg:white fg:black"
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+AOSC = ""
+Arch = "󰣇"
+Artix = "󰣇"
+EndeavourOS = ""
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+Pop = ""
+
+[python]
+format = '[ ${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+style = "none"
+
+[ruby]
+format = '[ $symbol($version )]($style)'
+style = "none"
+
+[rust]
+format = '[ $symbol($version )]($style)'
+style = "none"
+
+[status]
+disabled = false
+format = '[$symbol]($style)'
+success_symbol = '[✔ ](bold green)[](fg:blue bg:black)'
+symbol = '[](fg:red bg:black)[ $status ✗ ](fg:yellow bg:red)[](fg:blue bg:red)'
+
+[time]
+disabled = false
+style = "bg:white fg:black"
+format = '[$time ]($style)'
+time_format = '%T'
+
+[username]
+style_root = "bg:white fg:bright-red"
+style_user = "bg:white fg:black"
+format = '[ $user]($style)'
+
+[custom.dir_right_git]
+when = "git rev-parse --is-inside-work-tree"
+format = "[](fg:blue bg:green)"
+
+[custom.dir_right_no_git]
+when = "! git rev-parse --is-inside-work-tree"
+format = "[](fg:blue bg:black)"
+
+[custom.git_right]
+when = "git rev-parse --is-inside-work-tree"
+format = "[](fg:green bg:black)"
 
